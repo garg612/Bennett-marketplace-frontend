@@ -12,6 +12,7 @@ const CreateListingPage = lazy(() => import('../pages/CreateListingPage').then((
 const EditListingPage = lazy(() => import('../pages/EditListingPage').then((module) => ({ default: module.EditListingPage })));
 const ChatPage = lazy(() => import('../pages/ChatPage').then((module) => ({ default: module.ChatPage })));
 const ProfilePage = lazy(() => import('../pages/ProfilePage').then((module) => ({ default: module.ProfilePage })));
+const MicrosoftCallback = lazy(() => import('../pages/MicrosoftCallback').then((module) => ({ default: module.MicrosoftCallback })));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage').then((module) => ({ default: module.NotFoundPage })));
 
 const withRouteBoundary = (element) => <ErrorBoundary>{element}</ErrorBoundary>;
@@ -32,6 +33,7 @@ export default function AppRouter (){
                         <Route index element={withRouteBoundary(<HomePage />)} />
                         <Route path="/listings" element={withRouteBoundary(<ListingsPage />)} />
                         <Route path="/listings/:id" element={withRouteBoundary(<ProductDetailPage />)} />
+                        <Route path="/auth/microsoft/callback" element={withRouteBoundary(<MicrosoftCallback />)} />
                         <Route element={withRouteBoundary(<AuthLayout />)}>
                             <Route path="/create-listing" element={withRouteBoundary(<CreateListingPage />)} />
                             <Route path="/listings/:id/edit" element={withRouteBoundary(<EditListingPage />)} />
