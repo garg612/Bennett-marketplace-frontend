@@ -8,17 +8,9 @@ import { useAuth } from './hooks/useAuth';
 function App(){
   const { initializeAuth } = useAuth();
 
-  uuseEffect(() => {
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get("token");
-
-  if (token) {
-    localStorage.setItem("accessToken", token);
-
-    // clean URL
-    window.history.replaceState({}, document.title, "/");
-  }
-}, []);
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
 
   return (
     <ErrorBoundary>
