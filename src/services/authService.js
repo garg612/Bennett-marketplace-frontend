@@ -1,4 +1,5 @@
 import { apiClient } from '../api/client';
+import { clearStoredAuthTokens } from '../api/client';
 
 const getApiBaseUrl = () => {
   const configuredBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
@@ -25,7 +26,11 @@ const normalizeUser = (user) => {
 
 export const authService = {
   async logout() {
-    await apiClient.post('/api/users/logout', {});
+    try {
+      await apiClient.post('/api/users/logout', {});
+    } finally {
+      clearStoredAuthTokens();
+    }
     return true;
   },
 

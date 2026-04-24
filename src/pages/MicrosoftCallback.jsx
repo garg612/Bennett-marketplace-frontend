@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { Spinner } from '../components/ui/Spinner';
+import { setStoredAuthTokens } from '../api/client';
 
 export const MicrosoftCallback = () => {
   const navigate = useNavigate();
@@ -10,22 +11,25 @@ export const MicrosoftCallback = () => {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Get error from URL parameters
         const params = new URLSearchParams(window.location.search);
         const authError = params.get('authError');
 
         if (authError) {
           console.error('Microsoft OAuth error:', authError);
-          // Redirect to home with error message
           navigate('/', { replace: true });
           return;
         }
 
-        // Initialize auth to fetch current user from backend
-        // Backend already set cookies, so just refresh auth state
-        await initializeAuth();
+        const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+        const accessToken = hashParams.get('accessToken');
+        const refreshToken = hashParams.get('refreshToken');
 
-        // Redirect to home
+        if (accessToken) {
+          setStoredAuthTokens({ accessToken, refreshToken: refreshToken || '' });
+          window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
+        }
+
+        await initializeAuth();
         navigate('/', { replace: true });
       } catch (error) {
         console.error('Microsoft callback error:', error);
